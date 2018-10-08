@@ -1,0 +1,14 @@
+function [ output_args ] = fetchData( path,name )
+%UNTITLED Summary of this function goes here
+%   Detailed explanation goes here
+    type = name(1:2);
+    
+    if find(strcmp(type,'ms'))
+        type='melanoma';
+    end
+    
+    if tye
+
+
+end
+

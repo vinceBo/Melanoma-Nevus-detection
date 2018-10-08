@@ -10,12 +10,6 @@ function [ outputImage ] = CircleSegmentation1( inputImage )
     nevusGrayDouble = im2double(nevus01GRAY);
     contraste=std(nevusGrayDouble);
     contrasteMean = mean(contraste);
-    sensitive = 0.55;
-    if contrasteMean < 0.1
-        sensitive = 0.45;
-    else
-        sensitive = 0.6;
-    end
     
     %nevus01GRAYContrast = histeq(nevus01GRAY);
     inverseGray = uint8(255)-nevus01GRAY;
@@ -26,7 +20,7 @@ function [ outputImage ] = CircleSegmentation1( inputImage )
     keptBoundary = -1;
     found = false;
     ended = false;
-    sensitivity = 0.5
+    sensitivity = 0.5;
     realMetricString = '';
     
     while found==false || ended==false

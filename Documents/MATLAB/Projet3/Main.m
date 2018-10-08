@@ -1,10 +1,13 @@
 clc
 clear all
 
-path = 'data/training'
+path = '/Users/vincentbonnardeaux/Documents/MATLAB/Projet3/Database/';
+I1 = fetchData(path,'sm025.jpg');
 
-imageIn = imread('ms03.jpg');
-AdtyreaTot = length(imageIn(:,1,1))*length(imageIn(1,:,1)); 
-imageCropped = cropper(imageIn);
+imageIn = imshow(I1);
+
+
+AdtyreaTot = length(I1(:,1,1))*length(I1(1,:,1)); 
+imageCropped = cropper(I1);
 %imageRetour = CircleSegmentation1(imageCropped);
-imageRetour = CircleSegmentation1(imageIn);
+imageRetour = CircleSegmentation1(I1);
