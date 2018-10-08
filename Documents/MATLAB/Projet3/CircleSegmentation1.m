@@ -26,7 +26,8 @@ function [ outputImage ] = CircleSegmentation1( inputImage )
     keptBoundary = -1;
     found = false;
     ended = false;
-    sensitivity = 0.45
+    sensitivity = 0.5
+    realMetricString = '';
     
     while found==false || ended==false
         disp('we in')
@@ -43,7 +44,7 @@ function [ outputImage ] = CircleSegmentation1( inputImage )
         se = strel('disk',2);
         nevus01BW = imclose(nevus01BW,se);
 
-        figure,imshow(nevus01BW);
+        %figure,imshow(nevus01BW);
 
 
         Bw_filled = imfill(nevus01BW,'holes');
@@ -92,14 +93,16 @@ function [ outputImage ] = CircleSegmentation1( inputImage )
           disp(metric_string);
 
           % mark objects above the threshold with a black circle
-          if metric > threshold && areaFactor > 0.005
+          if metric > threshold && areaFactor > 0.0027 && areaFactor < 0.25
             if found==true
                 if metric <= lastMetric
                     ended = true;
                 end
             end
             if ended == false
+                
                 found = true;
+                realMetricString = sprintf('%2.2f',metric);
                 lastMetric = metric;
                 lastAreaFactor = areaFactor;
                 keptBoundary = B{k};
@@ -123,12 +126,12 @@ function [ outputImage ] = CircleSegmentation1( inputImage )
         %ended = true;
     end
     
-    if keptIndex~=-1
+    if keptBoundary~=-1
        
         plot(keptBoundary(:,2), keptBoundary(:,1), 'w', 'LineWidth', 2)
         centroid = stats(k).Centroid;
         plot(centroid(1),centroid(2),'ko');
-        text(boundary(1,2)-35,boundary(1,1)+13,metric_string,'Color','y',...
+        text(boundary(1,2)-35,boundary(1,1)+13,realMetricString,'Color','y',...
         'FontSize',14,'FontWeight','bold')
         title(['Metrics closer to 1 indicate that ',...
                'the object is approximately round']);
