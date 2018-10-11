@@ -23,7 +23,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
     keptBoundary = -1;
     found = false;
     ended = false;
-    sensitivity = 0.66;
+    sensitivity = 0.56;
     realMetricString = '';
     
     while found==false || ended==false
@@ -124,7 +124,14 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
         if (found == true)
             ended = true;
         end
+        
         sensitivity = sensitivity + 0.02;
+        
+        isNextBetter = CheckNextSensitivity(lastMetric,inverseGray,sensitivity,AreaTot);
+        if (isNextBetter == true)
+            ended = false;
+            found = true;
+        end
     end
     
     if keptBoundary~=-1
