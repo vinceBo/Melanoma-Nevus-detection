@@ -1,5 +1,6 @@
-function [ outputImage ] = CircleSegmentation1( inputImage )
+function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation1( inputImage )
 %UNTITLED2 Summary of this function goes here
+%IDEA: USE ENTROPY
 %   Detailed explanation goes here
 
     nevus01RGB = inputImage;
@@ -13,6 +14,8 @@ function [ outputImage ] = CircleSegmentation1( inputImage )
     
     %nevus01GRAYContrast = histeq(nevus01GRAY);
     inverseGray = uint8(255)-nevus01GRAY;
+    %inverseGray = adapthisteq(inverseGray);
+    [inverseGray,T] = histeq(inverseGray);
     %figure, imshow(nevus01BW);
     
     % TODO: Commencer la boucle ici
@@ -20,10 +23,11 @@ function [ outputImage ] = CircleSegmentation1( inputImage )
     keptBoundary = -1;
     found = false;
     ended = false;
-    sensitivity = 0.5;
+    sensitivity = 0.66;
     realMetricString = '';
     
     while found==false || ended==false
+        lastMetric = 0.15;
         disp('we in')
         %replace hard-coded value with variable: sensitivity
         nevus01BW = im2bw(inverseGray,sensitivity);
@@ -59,7 +63,7 @@ function [ outputImage ] = CircleSegmentation1( inputImage )
 
         %%
         % Determining circularity index
-        stats = regionprops(L,'Area','Centroid');
+        stats = regionprops(L,'Area','Centroid','ConvexArea','Perimeter','Eccentricity');
 
         threshold = 0.15;
 
@@ -85,45 +89,48 @@ function [ outputImage ] = CircleSegmentation1( inputImage )
           % display the results
           metric_string = sprintf('%2.2f',metric);
           disp(metric_string);
+          
+          %check if border is part of this boundary
+          isBorderDetected = ImBorderDetection(boundary);
 
           % mark objects above the threshold with a black circle
-          if metric > threshold && areaFactor > 0.0027 && areaFactor < 0.25
-            if found==true
-                if metric <= lastMetric
-                    ended = true;
-                end
-            end
-            if ended == false
-                
-                found = true;
-                realMetricString = sprintf('%2.2f',metric);
-                lastMetric = metric;
-                lastAreaFactor = areaFactor;
-                keptBoundary = B{k};
-                %boundary = B{k};
-                %plot(boundary(:,2), boundary(:,1), 'w', 'LineWidth', 2)
-
-                %centroid = stats(k).Centroid;
-                %plot(centroid(1),centroid(2),'ko');
-                %text(boundary(1,2)-35,boundary(1,1)+13,metric_string,'Color','y',...
-                 %  'FontSize',14,'FontWeight','bold');
-            end
+          if (metric > threshold && areaFactor > 0.005 && areaFactor < 0.25 && isBorderDetected == false)
+              disp('in threshold');
+              if found==true
+                  disp('in found == true');
+                  if metric > lastMetric
+                      disp('in metric >');
+                      realMetricString = sprintf('%2.2f',metric);
+                      lastMetric = metric;
+                      lastAreaFactor = areaFactor;
+                      keptBoundary = B{k};
+                      keptStats = stats(k);
+                      boundMatrix = L;
+                  end
+              else
+                  disp('found is false');
+                  found = true;
+                  realMetricString = sprintf('%2.2f',metric);
+                  lastMetric = metric;
+                  lastAreaFactor = areaFactor;
+                  keptBoundary = B{k};
+                  keptStats = stats(k);
+                  boundMatrix = L;
+              end
           end
 
         end
 
-        %title(['Metrics closer to 1 indicate that ',...
-          %     'the object is approximately round']);
-           
+        if (found == true)
+            ended = true;
+        end
         sensitivity = sensitivity + 0.02;
-        %found = true;
-        %ended = true;
     end
     
     if keptBoundary~=-1
-       
+        
         plot(keptBoundary(:,2), keptBoundary(:,1), 'w', 'LineWidth', 2)
-        centroid = stats(k).Centroid;
+        centroid = keptStats.Centroid;
         plot(centroid(1),centroid(2),'ko');
         text(boundary(1,2)-35,boundary(1,1)+13,realMetricString,'Color','y',...
         'FontSize',14,'FontWeight','bold')
