@@ -43,3 +43,8 @@ imshow(replacedImage)
 ll = edge (replacedImage,'canny');
 figure(3)
 imshow(ll)
+
+[x,y] = size(I);
+n = floor(5*sqrt((x/768)*(y/512)));
+shavedImage = medfilt2(replacedImage,[n n]);
+figure, imshow(shavedImage);
