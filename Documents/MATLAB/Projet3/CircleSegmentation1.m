@@ -8,6 +8,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
     figure, imshow(nevus01RGB);
     
     nevus01GRAY = rgb2gray(nevus01RGB);
+    nevus01GRAY = Gillette(nevus01GRAY);
     nevusGrayDouble = im2double(nevus01GRAY);
     contraste=std(nevusGrayDouble);
     contrasteMean = mean(contraste);
