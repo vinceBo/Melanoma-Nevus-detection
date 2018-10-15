@@ -2,7 +2,7 @@ clc
 clear all
 
 path = '/Users/vincentbonnardeaux/Documents/MATLAB/Projet3/Database/';
-I1 = fetchData(path,'sm008.jpg');
+I1 = fetchData(path,'sm027.jpg');
 I = imresize(I1,[538 720], 'bilinear');
 
 imageIn = imshow(I1);

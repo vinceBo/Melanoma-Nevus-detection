@@ -48,3 +48,6 @@ imshow(ll)
 n = floor(5*sqrt((x/768)*(y/512)));
 shavedImage = medfilt2(replacedImage,[n n]);
 figure, imshow(shavedImage);
+
+imfiltered = imgaussfilt(replacedImage,0.1);
+figure, imshow(imfiltered);

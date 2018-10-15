@@ -5,10 +5,11 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
 
     nevus01RGB = inputImage;
     AreaTot = length(nevus01RGB(:,1,1))*length(nevus01RGB(1,:,1)); 
-    figure, imshow(nevus01RGB);
+    imshow(nevus01RGB);
     
     nevus01GRAY = rgb2gray(nevus01RGB);
-    nevus01GRAY = Gillette(nevus01GRAY);
+    %nevus01GRAY = Gillette(nevus01GRAY);
+    
     nevusGrayDouble = im2double(nevus01GRAY);
     contraste=std(nevusGrayDouble);
     contrasteMean = mean(contraste);
@@ -22,9 +23,11 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
     % TODO: Commencer la boucle ici
     outputImage = nevus01RGB;
     keptBoundary = -1;
+    keptStats=0;
+    boundMatrix=0;
     found = false;
     ended = false;
-    sensitivity = 0.56;
+    sensitivity = 0.5;
     realMetricString = '';
     
     while found==false || ended==false
@@ -53,7 +56,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
         %%
         % Finding boundaries:
         [B,L] = bwboundaries(nevus01BW,'noholes');
-        figure,imshow(nevus01RGB);
+        imshow(nevus01RGB);
         % Display the label matrix and draw each boundary
         %figure,imshow(label2rgb(L, @jet, [.5 .5 .5]))
         hold on
@@ -95,7 +98,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
           isBorderDetected = ImBorderDetection(boundary);
 
           % mark objects above the threshold with a black circle
-          if (metric > threshold && areaFactor > 0.005 && areaFactor < 0.25 && isBorderDetected == false)
+          if (metric > threshold && areaFactor > 0.006 && areaFactor < 0.25 && isBorderDetected == false)
               disp('in threshold');
               if found==true
                   disp('in found == true');
@@ -131,7 +134,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
         isNextBetter = CheckNextSensitivity(lastMetric,inverseGray,sensitivity,AreaTot);
         if (isNextBetter == true)
             ended = false;
-            found = true;
+            found = false;
         end
     end
     
