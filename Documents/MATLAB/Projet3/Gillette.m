@@ -1,7 +1,7 @@
 function [ shavedImage ] = Gillette( I )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
-    se = strel('disk',2);
+    se = strel('disk',5);
     hairs = imbothat(I,se);
     BW = hairs > 15;
     BW2 = imdilate(BW,strel('disk',1));

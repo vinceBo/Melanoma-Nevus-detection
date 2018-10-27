@@ -2,18 +2,36 @@ clc
 clear all
 
 path = '/Users/vincentbonnardeaux/Documents/MATLAB/Projet3/Database/';
-I1 = fetchData(path,'sm027.jpg');
-I = imresize(I1,[538 720], 'bilinear');
 
-imageIn = imshow(I1);
-%Ishaved = rasoir(I);
-%figure,imshow(Ishaved);
+for i=1:2
+    imName = 'sm';
+    if i<10
+        imName = strcat(imName,'00',int2str(i),'.jpg');
+    elseif i>=10 && i<100
+        imName = strcat(imName,'0',int2str(i),'.jpg');
+    else
+        imName = strcat(imName,int2str(i),'.jpg');
+    end
+    figure,im
 
-AdtyreaTot = length(I1(:,1,1))*length(I1(1,:,1)); 
-imageCropped = cropper(I1);
-%imageRetour = CircleSegmentation1(imageCropped);
+    I1 = fetchData(path,imName);
+    I = imresize(I1,[538 720], 'bilinear');
 
-[imageRetour,boundary,stats,boundMatrix] = CircleSegmentation1(I1);
+    iGray = rgb2gray(I1);
+    gilettedI = Gillette(iGray);
+    homoFiltered = preprocessing(I1);
 
-features = featureExtractor(boundary,stats,I1,boundMatrix);
+    %imshowpair(iGray,im2uint8(homoFiltered),'montage');
+
+    %Ishaved = rasoir(I);
+    %figure,imshow(Ishaved);
+
+    AdtyreaTot = length(I1(:,1,1))*length(I1(1,:,1)); 
+    %imageCropped = cropper(I1);
+    %imageRetour = CircleSegmentation1(imageCropped);
+
+    [imageRetour,boundary,stats,boundMatrix] = CircleSegmentation1(I1);
+
+    features = featureExtractor(boundary,stats,I1,boundMatrix);
+end
 

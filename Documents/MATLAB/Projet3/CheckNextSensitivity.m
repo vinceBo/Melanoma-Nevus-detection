@@ -49,7 +49,7 @@ function [ nextIsBetter ] = CheckNextSensitivity( metricPrevious,inverseGray,sen
         disp(metric_string);
 
         %check if border is part of this boundary
-        isBorderDetected = ImBorderDetection(boundary);
+        isBorderDetected = ImBorderDetection(boundary,inverseGray);
 
         % mark objects above the threshold with a black circle
         if (metric >= threshold && areaFactor > 0.005 && areaFactor < 0.25 && isBorderDetected == false)

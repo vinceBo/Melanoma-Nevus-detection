@@ -9,7 +9,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
     imshow(nevus01RGB);
     
     nevus01GRAY = rgb2gray(nevus01RGB);
-    %nevus01GRAY = preprocessing(nevus01GRAY);
+    nevus01GRAY = preprocessing(nevus01GRAY);
     %nevus01GRAY = Gillette(nevus01GRAY);
     
     
@@ -54,7 +54,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
 
         Bw_filled = imfill(nevus01BW,'holes');
         imshow(Bw_filled);
-        pause(0.5);
+        pause(0.25);
         imshow(nevus01RGB);
 
         outputImage = Bw_filled;
@@ -100,10 +100,10 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
           disp(metric_string);
           
           %check if border is part of this boundary
-          isBorderDetected = ImBorderDetection(boundary);
+          isBorderDetected = ImBorderDetection(boundary,inverseGray);
 
           % mark objects above the threshold with a black circle
-          if (metric > threshold && areaFactor > 0.006 && areaFactor < 0.25 && isBorderDetected == false)
+          if (metric > threshold && areaFactor > 0.008 && areaFactor < 0.25 && isBorderDetected == false)
               disp('in threshold');
               if found==true
                   disp('in found == true');

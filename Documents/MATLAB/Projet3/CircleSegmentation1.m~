@@ -9,8 +9,8 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
     imshow(nevus01RGB);
     
     nevus01GRAY = rgb2gray(nevus01RGB);
-    nevus
-    %nevus01GRAY = Gillette(nevus01GRAY);
+    %nevus01GRAY = preprocessing(nevus01GRAY);
+    nevus01GRAY = Gillette(nevus01GRAY);
     
     
     nevusGrayDouble = im2double(nevus01GRAY);
@@ -18,7 +18,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
     contrasteMean = mean(contraste);
     
     %nevus01GRAYContrast = histeq(nevus01GRAY);
-    inverseGray = uint8(255)-nevus01GRAY;
+    inverseGray = uint8(255)-im2uint8(nevus01GRAY);
     %inverseGray = adapthisteq(inverseGray);
     [inverseGray,T] = histeq(inverseGray);
     %figure, imshow(nevus01BW);
@@ -53,13 +53,15 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
 
 
         Bw_filled = imfill(nevus01BW,'holes');
-        figure,imshow(Bw_filled);
+        imshow(Bw_filled);
+        pause(0.25);
+        imshow(nevus01RGB);
 
         outputImage = Bw_filled;
         %%
         % Finding boundaries:
         [B,L] = bwboundaries(nevus01BW,'noholes');
-        imshow(nevus01RGB);
+        %imshow(nevus01RGB);
         % Display the label matrix and draw each boundary
         %figure,imshow(label2rgb(L, @jet, [.5 .5 .5]))
         hold on
@@ -98,7 +100,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
           disp(metric_string);
           
           %check if border is part of this boundary
-          isBorderDetected = ImBorderDetection(boundary);
+          isBorderDetected = ImBorderDetection(boundary,inverseGray);
 
           % mark objects above the threshold with a black circle
           if (metric > threshold && areaFactor > 0.006 && areaFactor < 0.25 && isBorderDetected == false)
