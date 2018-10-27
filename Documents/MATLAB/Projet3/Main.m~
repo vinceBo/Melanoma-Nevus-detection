@@ -3,7 +3,7 @@ clear all
 
 path = '/Users/vincentbonnardeaux/Documents/MATLAB/Projet3/Database/';
 
-for i=1:2
+for i=31:31
     imName = 'sm';
     if i<10
         imName = strcat(imName,'00',int2str(i),'.jpg');
@@ -12,16 +12,17 @@ for i=1:2
     else
         imName = strcat(imName,int2str(i),'.jpg');
     end
-    figure,im
 
     I1 = fetchData(path,imName);
+    figure,imshow(I1);
     I = imresize(I1,[538 720], 'bilinear');
 
     iGray = rgb2gray(I1);
     gilettedI = Gillette(iGray);
     homoFiltered = preprocessing(I1);
 
-    %imshowpair(iGray,im2uint8(homoFiltered),'montage');
+    imshowpair(iGray,im2uint8(homoFiltered),'montage');
+    %%
 
     %Ishaved = rasoir(I);
     %figure,imshow(Ishaved);

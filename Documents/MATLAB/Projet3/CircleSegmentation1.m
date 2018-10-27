@@ -10,7 +10,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
     
     nevus01GRAY = rgb2gray(nevus01RGB);
     nevus01GRAY = preprocessing(nevus01GRAY);
-    %nevus01GRAY = Gillette(nevus01GRAY);
+    nevus01GRAY = Gillette(nevus01GRAY);
     
     
     nevusGrayDouble = im2double(nevus01GRAY);
@@ -36,11 +36,8 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
     while found==false || ended==false
         lastMetric = 0.15;
         disp('we in')
-        %replace hard-coded value with variable: sensitivity
         nevus01BW = im2bw(inverseGray,sensitivity);
         %nevus01BW = imbinarize(nevus01GRAY);
-
-        %figure, imshow(inverseGray);
 
         % remove all object containing fewer than 30 pixels
         nevus01BW = bwareaopen(nevus01BW,150);
@@ -61,14 +58,8 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
         %%
         % Finding boundaries:
         [B,L] = bwboundaries(nevus01BW,'noholes');
-        %imshow(nevus01RGB);
-        % Display the label matrix and draw each boundary
-        %figure,imshow(label2rgb(L, @jet, [.5 .5 .5]))
+
         hold on
-        %for k = 1:length(B)
-         % boundary = B{k};
-          %plot(boundary(:,2), boundary(:,1), 'w', 'LineWidth', 2)
-        %end
 
         %%
         % Determining circularity index
