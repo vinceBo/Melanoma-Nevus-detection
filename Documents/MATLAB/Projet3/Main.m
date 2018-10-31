@@ -46,3 +46,9 @@ for i=53:53
     features = featureExtractor(boundary,stats,I1,boundMatrix);
 end
 
+%% testing SVM
+load fisheriris
+binaryData = grp2idx(species);
+dataInput = binaryData(1:100);
+featureInput = meas(1:100,:);
+accuracy = SVMtrainer(dataInput, featureInput);
