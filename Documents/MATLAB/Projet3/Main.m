@@ -3,7 +3,7 @@ clear all
 
 path = '/Users/vincentbonnardeaux/Documents/MATLAB/Projet3/Database/';
 
-for i=14:14
+for i=53:53
     imName = 'sm';
     if i<10
         imName = strcat(imName,'00',int2str(i),'.jpg');
@@ -14,6 +14,11 @@ for i=14:14
     end
 
     I1 = fetchData(path,imName);
+    
+    %razoredddd = newRazor(I1);
+    %figure, imshow(razoredddd);
+    %imshow(I1);
+    %%
     figure,imshow(I1);
     I = imresize(I1,[538 720], 'bilinear');
 
@@ -22,7 +27,10 @@ for i=14:14
     homoFiltered = preprocessing(I1);
     gilettedI = Gillette(homoFiltered);
 
-    imshowpair(gilettedI,im2uint8(homoFiltered),'montage');
+    % Canny edge detection
+    ICanny = edge(homoFiltered,'canny');
+
+    %imshowpair(iGray,im2uint8(homoFiltered),'montage');
     
     %%
 

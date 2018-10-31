@@ -23,6 +23,12 @@ function [ imageFiltree ] = preprocessing( imageOriginale )
     
     %Returning homomorphic filtered
     imageFiltree = exp(Iout) - 1;
+    
+    %[x,y] = size(imageFiltree);
+    %n = floor(5*sqrt((x/768)*(y/512)));
+    %imageFiltree = medfilt2(imageFiltree,[n n]);
+    
+    %imageFiltree = imgaussfilt(imageFiltree,0.1);
 
 end
 

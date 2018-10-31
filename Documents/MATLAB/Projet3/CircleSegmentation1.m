@@ -94,7 +94,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
           isBorderDetected = ImBorderDetection(boundary,inverseGray);
 
           % mark objects above the threshold with a black circle
-          if (metric > threshold && areaFactor > 0.008 && areaFactor < 0.25 && isBorderDetected == false)
+          if (metric > threshold && areaFactor > 0.01 && areaFactor < 0.25 && isBorderDetected == false)
               disp('in threshold');
               if found==true
                   disp('in found == true');

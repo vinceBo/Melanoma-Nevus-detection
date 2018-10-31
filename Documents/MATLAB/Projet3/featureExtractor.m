@@ -56,16 +56,16 @@ function [ featureVector ] = featureExtractor( Boundary, stats, Image,L )
     featureVector(16) = graystats.MaxIntensity;
 
     % Standard deviation 
-    featureVector(17) = std(redstats.PixelValues);
-    featureVector(18) = std(greenstats.PixelValues);
-    featureVector(19) = std(bluestats.PixelValues);
-    featureVector(20) = std(graystats.PixelValues);
+    %featureVector(17) = std(redstats.PixelValues);
+    %featureVector(18) = std(greenstats.PixelValues);
+    %featureVector(19) = std(bluestats.PixelValues);
+    %featureVector(20) = std(graystats.PixelValues);
 
     % Skewness
-    featureVector(17) = Skewness(redstats.PixelValues);
-    featureVector(18) = Skewness(greenstats.PixelValues);
-    featureVector(19) = Skewness(bluestats.PixelValues);
-    featureVector(20) = Skewness(graystats.PixelValues);
+    %featureVector(17) = skewness(redstats.PixelValues);
+    %featureVector(18) = skewness(greenstats.PixelValues);
+    %featureVector(19) = skewness(bluestats.PixelValues);
+    %featureVector(20) = skewness(graystats.PixelValues);
 
 
     
