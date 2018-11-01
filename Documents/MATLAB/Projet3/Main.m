@@ -15,7 +15,7 @@ for i=53:53
 
     I1 = fetchData(path,imName);
     
-    %razoredddd = newRazor(I1);
+    I1 = newRazor(I1);
     %figure, imshow(razoredddd);
     %imshow(I1);
     %%
@@ -47,8 +47,8 @@ for i=53:53
 end
 
 %% testing SVM
-load fisheriris
-binaryData = grp2idx(species);
-dataInput = binaryData(1:100);
-featureInput = meas(1:100,:);
-accuracy = SVMtrainer(dataInput, featureInput);
+%load fisheriris
+%binaryData = grp2idx(species);
+%dataInput = binaryData(1:100);
+%featureInput = meas(1:100,:);
+%accuracy = SVMtrainer(dataInput, featureInput);

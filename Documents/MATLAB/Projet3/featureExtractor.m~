@@ -28,17 +28,14 @@ function [ featureVector ] = featureExtractor( Boundary, stats, Image,L )
     greenstats = regionprops(L,imageF(:,:,2),'MeanIntensity','WeightedCentroid','MaxIntensity','PixelValues');
     bluestats = regionprops(L,imageF(:,:,3),'MeanIntensity','WeightedCentroid','MaxIntensity','PixelValues');
     graystats = regionprops(L,imageGray(:,:),'MeanIntensity','WeightedCentroid','MaxIntensity','PixelValues');
-    hstats = regionprops(L,imageHsv(:,:,1),'MeanIntensity','WeightedCentroid','MaxIntensity','PixelValues');
-    vstats = regionprops(L,imageHsv(:,:,3),'MeanIntensity','WeightedCentroid','MaxIntensity','PixelValues');
-    
+    hsvstats = regionprops(L,imageGray(:,:),'MeanIntensity','WeightedCentroid','MaxIntensity','PixelValues');
+
     %% RGB and gray analysis
     % Levels of each color
     featureVector(5) = redstats.MeanIntensity;
     featureVector(6) = greenstats.MeanIntensity;
     featureVector(7) = bluestats.MeanIntensity;
     featureVector(8) = graystats.MeanIntensity;
-    featureVector(8) = hstats.MeanIntensity;
-    featureVector(8) = vstats.MeanIntensity;
     
     % Distances between weighted centroids
     redCentroid = (redstats(2).WeightedCentroid);
@@ -59,8 +56,6 @@ function [ featureVector ] = featureExtractor( Boundary, stats, Image,L )
     featureVector(14) = greenstats(2).MaxIntensity;
     featureVector(15) = bluestats(2).MaxIntensity;
     featureVector(16) = graystats(2).MaxIntensity;
-    featureVector(16) = hstats(2).MaxIntensity;
-    featureVector(16) = vraystats(2).MaxIntensity;
 
     % Standard deviation 
    
@@ -68,16 +63,12 @@ function [ featureVector ] = featureExtractor( Boundary, stats, Image,L )
     featureVector(18) = std(double(greenstats(2).PixelValues));
     featureVector(19) = std(double(bluestats(2).PixelValues));
     featureVector(20) = std(double(graystats(2).PixelValues));
-    featureVector(20) = std(double(hstats(2).PixelValues));
-    featureVector(20) = std(double(vstats(2).PixelValues));
-    
+
     % Skewness
     featureVector(17) = skewness(double(redstats(2).PixelValues));
     featureVector(18) = skewness(double(greenstats(2).PixelValues));
     featureVector(19) = skewness(double(bluestats(2).PixelValues));
     featureVector(20) = skewness(double(graystats(2).PixelValues));
-    featureVector(20) = skewness(double(hstats(2).PixelValues));
-    featureVector(20) = skewness(double(vstats(2).PixelValues));
 
 
     
