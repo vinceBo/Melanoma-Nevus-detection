@@ -1,8 +1,9 @@
+
 clc
 clear all
-
+%%
 path = '/Users/vincentbonnardeaux/Documents/MATLAB/Projet3/Database/';
-
+%%
 for i=53:53
     imName = 'sm';
     if i<10
@@ -14,6 +15,7 @@ for i=53:53
     end
 
     I1 = fetchData(path,imName);
+    iGray = rgb2gray(I1);
     
     I1 = newRazor(I1);
     %figure, imshow(razoredddd);
@@ -22,7 +24,7 @@ for i=53:53
     figure,imshow(I1);
     I = imresize(I1,[538 720], 'bilinear');
 
-    iGray = rgb2gray(I1);
+    %iGray = rgb2gray(I1);
    
     homoFiltered = preprocessing(I1);
     gilettedI = Gillette(homoFiltered);
@@ -53,3 +55,18 @@ end
 %dataInput = binaryData(1:100);
 %featureInput = meas(1:100,:);
 %accuracy = SVMtrainer(dataInput, featureInput);
+
+
+%% testing Texture
+[glcm2,SI] = graycomatrix(gilettedI,'Offset',[2 0],'Symmetric',true);
+figure,
+imshow(uint8(10*SI))
+figure,
+imshow(gilettedI)
+
+stats = GLCM_Features(glcm2);
+
+%% testing razor
+%Itest = imread('allo.jpg');
+%razoredI = newRazor(Itest);
+%imshow(razoredI)

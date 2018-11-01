@@ -1,8 +1,8 @@
 
 clc
 clear all
-img2 = imread('nevus01.jpg');
-img = cropper(img2);
+img2 = imread('sm053.jpg');
+
    
     %figure;
     imshow(img);

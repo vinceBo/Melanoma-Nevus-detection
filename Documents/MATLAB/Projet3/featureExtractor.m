@@ -104,7 +104,23 @@ function [ featureVector ] = featureExtractor( Boundary, stats, Image,L, indexOf
     
     %%
     %%%%%%% Textures features %%%%%%%
+    [glcm2,SI] = graycomatrix(imageGray,'Offset',[2 0],'Symmetric',true);
+    textureFeatures = GLCM_Features(glcm2);
     
+    featureVector(40) = textureFeatures.contr;
+    featureVector(40) = textureFeatures.energ;
+    featureVector(40) = textureFeatures.sosvh;
+    featureVector(40) = textureFeatures.entro;
+    featureVector(40) = textureFeatures.homop;
+    featureVector(40) = textureFeatures.savgh;
+    featureVector(40) = textureFeatures.senth;
+    featureVector(40) = textureFeatures.svarh;
+    featureVector(40) = textureFeatures.denth;
+    featureVector(40) = textureFeatures.dvarh;
+    featureVector(40) = textureFeatures.inf1h;
+    featureVector(40) = textureFeatures.inf2h;
+    featureVector(40) = textureFeatures.corrp;
+
     
     
     

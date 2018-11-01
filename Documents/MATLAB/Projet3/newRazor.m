@@ -2,7 +2,7 @@ function [ imageOut ] = newRazor( imageIn )
 %UNTITLED Summary of this function goes here
 %   Detailed explanation goes here
 
-    dilation_strength = 6;
+    dilation_strength = 3;
     R = imclose(imageIn(:,:,1),strel('disk',dilation_strength));
     G = imclose(imageIn(:,:,2),strel('disk',dilation_strength));
     B = imclose(imageIn(:,:,3),strel('disk',dilation_strength));
