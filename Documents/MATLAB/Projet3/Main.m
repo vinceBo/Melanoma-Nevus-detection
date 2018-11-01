@@ -41,9 +41,10 @@ for i=53:53
     %imageCropped = cropper(I1);
     %imageRetour = CircleSegmentation1(imageCropped);
 
-    [imageRetour,boundary,stats,boundMatrix] = CircleSegmentation1(I1);
-
-    features = featureExtractor(boundary,stats,I1,boundMatrix);
+    [imageRetour,boundary,stats,boundMatrix,index ] = CircleSegmentation1(I1);
+    imshow(boundMatrix)
+    %%
+    features = featureExtractor(boundary,stats,I1,boundMatrix, index);
 end
 
 %% testing SVM

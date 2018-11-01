@@ -1,4 +1,4 @@
-function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation1( inputImage )
+function [ outputImage,keptBoundary,keptStats,boundMatrix, keptIndex ] = CircleSegmentation1( inputImage )
 %UNTITLED2 Summary of this function goes here
 %IDEA: USE ENTROPY
 %   Detailed explanation goes here
@@ -27,6 +27,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
     outputImage = nevus01RGB;
     keptBoundary = -1;
     keptStats=0;
+    keptIndex = -1;
     boundMatrix=0;
     found = false;
     ended = false;
@@ -104,6 +105,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
                       lastMetric = metric;
                       lastAreaFactor = areaFactor;
                       keptBoundary = B{k};
+                      keptIndex = k ;
                       keptStats = stats(k);
                       boundMatrix = L;
                   end
@@ -114,6 +116,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix ] = CircleSegmentation
                   lastMetric = metric;
                   lastAreaFactor = areaFactor;
                   keptBoundary = B{k};
+                  keptIndex = k;
                   keptStats = stats(k);
                   boundMatrix = L;
               end
