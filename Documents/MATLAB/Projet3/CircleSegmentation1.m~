@@ -1,4 +1,4 @@
-function [ outputImage, segmentationInformation ] = CircleSegmentation1( inputImage )
+function [ outputImage,keptBoundary,keptStats,boundMatrix, keptIndex, segmentationInformation ] = CircleSegmentation1( inputImage )
 %UNTITLED2 Summary of this function goes here
 %IDEA: USE ENTROPY
 %   Detailed explanation goes here
@@ -151,7 +151,7 @@ function [ outputImage, segmentationInformation ] = CircleSegmentation1( inputIm
     segmentationInformation.BoundaryMatrix = keptBoundary;
     segmentationInformation.LabelMatrix = boundMatrix; 
     segmentationInformation.Index = keptIndex;
-    segmentationInformation.Stats = keptStats;
+    segmentationInformation
     
 end
 

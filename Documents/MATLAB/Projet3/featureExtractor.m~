@@ -1,4 +1,4 @@
-function [ featureVector ] = featureExtractor( Image, segmentationInformation )
+function [ featureVector ] = featureExtractor( Boundary, stats, Image,L, indexOfRegion, segmentationInformation )
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
     imageF = Image;
@@ -8,8 +8,7 @@ function [ featureVector ] = featureExtractor( Image, segmentationInformation )
     Boundary = segmentationInformation.BoundaryMatrix;
     stats = segmentationInformation.Stats;
     L = segmentationInformation.LabelMatrix;
-    indexOfRegion = segmentationInformation.Index;
-    imageName = segmentationInformation.Name;
+    indexOfRegion = segmentationI
     
     %%
     %%%%%%% Asymetry features %%%%%%%

@@ -4,7 +4,7 @@ clear all
 %%
 path = '/Users/vincentbonnardeaux/Documents/MATLAB/Projet3/Database/';
 %%
-for i=77:80
+for i=79:79
     imName = 'sm';
     if i<10
         imName = strcat(imName,'00',int2str(i),'.jpg');
@@ -43,10 +43,13 @@ for i=77:80
     %imageCropped = cropper(I1);
     %imageRetour = CircleSegmentation1(imageCropped);
 
-    [imageRetour,boundary,stats,boundMatrix,index ] = CircleSegmentation1(I1);
-    %imshow(boundMatrix)
+    [imageRetour, segmInfo ] = CircleSegmentation1(I1);
+    segmInfo.Name = imName;
     %%
-    features = featureExtractor(boundary,stats,I1,boundMatrix, index);
+    imshow(segmInfo.LabelMatrix)
+    segmentations.(strcat('mel',int2str(i))) = segmInfo; 
+    %%
+    features = featureExtractor(I1, segmInfo);
 end
 
 %% testing SVM
@@ -70,3 +73,9 @@ end
 %Itest = imread('allo.jpg');
 %razoredI = newRazor(Itest);
 %imshow(razoredI)
+
+%% save all segmentations in .mat file
+save('allSegmentations.mat','segmentations');
+%%
+clc, clear all
+load allSegmentations.mat;
