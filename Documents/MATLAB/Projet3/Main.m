@@ -4,7 +4,7 @@ clear all
 %%
 path = '/Users/vincentbonnardeaux/Documents/MATLAB/Projet3/Database/';
 %%
-for i=53:53
+for i=77:80
     imName = 'sm';
     if i<10
         imName = strcat(imName,'00',int2str(i),'.jpg');
@@ -17,7 +17,7 @@ for i=53:53
     I1 = fetchData(path,imName);
     iGray = rgb2gray(I1);
     
-    I1 = newRazor(I1);
+    %I1 = newRazor(I1);
     %figure, imshow(razoredddd);
     %imshow(I1);
     %%
@@ -44,7 +44,7 @@ for i=53:53
     %imageRetour = CircleSegmentation1(imageCropped);
 
     [imageRetour,boundary,stats,boundMatrix,index ] = CircleSegmentation1(I1);
-    imshow(boundMatrix)
+    %imshow(boundMatrix)
     %%
     features = featureExtractor(boundary,stats,I1,boundMatrix, index);
 end
@@ -58,13 +58,13 @@ end
 
 
 %% testing Texture
-[glcm2,SI] = graycomatrix(gilettedI,'Offset',[2 0],'Symmetric',true);
-figure,
-imshow(uint8(10*SI))
-figure,
-imshow(gilettedI)
+%[glcm2,SI] = graycomatrix(gilettedI,'Offset',[2 0],'Symmetric',true);
+%figure,
+%imshow(uint8(10*SI))
+%figure,
+%imshow(gilettedI)
 
-stats = GLCM_Features(glcm2);
+%stats = GLCM_Features(glcm2);
 
 %% testing razor
 %Itest = imread('allo.jpg');

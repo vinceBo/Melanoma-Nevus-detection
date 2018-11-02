@@ -10,7 +10,7 @@ function [ outputImage,keptBoundary,keptStats,boundMatrix, keptIndex ] = CircleS
     
     nevus01GRAY = rgb2gray(nevus01RGB);
     nevus01GRAY = preprocessing(nevus01GRAY);
-    nevus01GRAY = Gillette(nevus01GRAY);
+    %nevus01GRAY = Gillette(nevus01GRAY);
     
     
     nevusGrayDouble = im2double(nevus01GRAY);

@@ -84,7 +84,7 @@ function [ featureVector ] = featureExtractor( Boundary, stats, Image,L, indexOf
     
     % number of non-zero histogram bins (out of 25)
     figure,
-    hr = histogram(double(redstats(2).PixelValues),25);
+    hr = histogram(double(redstats(indexOfRegion).PixelValues),25);
     featureVector(17) = sum(hr.BinCounts > max(hr.BinCounts)/100);
     hg = histogram(double(greenstats(indexOfRegion).PixelValues),25);
     featureVector(18) = sum(hg.BinCounts > max(hg.BinCounts)/100);
