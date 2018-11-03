@@ -15,15 +15,29 @@ function [ featureVector ] = featureExtractor( Image, segmentationInformation )
     %%%%%%% Asymetry features %%%%%%%
    
     % Ratio convex hull area / total area
-    featureVector(1) = stats.ConvexArea/stats.Area;
+    featureVector(1) = stats(indexOfRegion).ConvexArea/stats.Area;
     
     % Circularity Index
-    featureVector(2) = 4*pi*stats.Area/(stats.Perimeter)^2;
+    featureVector(2) = 4*pi*stats(indexOfRegion).Area/(stats.Perimeter)^2;
     
     %%
     %%%%%%% Border features %%%%%%%
-    featureVector(3) = stats.Eccentricity;
-    featureVector(4) = stats.Perimeter/stats.Area;
+    featureVector(3) = stats(indexOfRegion).Eccentricity;
+    featureVector(4) = stats(indexOfRegion).Perimeter/stats.Area;
+    featureVector(5) = stats(indexOfRegion).Solidity;
+    featureVector(6) = stats(indexOfRegion).Extent;
+    featureVector(7) = stats(indexOfRegion).Area / ((stats(indexOfRegion).EquivDiameter)/2)^2; 
+    featureVector(8) = stats(indexOfRegion).MinorAxisLength/stats(indexOfRegion).MajorAxisLength;
+    featureVector(9) = abs(stats(indexOfRegion.BoundingBox(2)) / stats(indexOfRegion.BoundingBox(3)))
+    % Distance from centroid
+    for i = 1:8
+        distanceCentroidToExtrema(i) = norm(stats(indexOfRegion).Extrema(i) - stats(indexOfRegion).Centroid);
+    end
+    sortedDistances = Sort(distanceCentroidToExtrema);
+    featureVector(8) = std(distanceCentroidToExtrema);
+    featureVector(9) = distanceCentroidToExtrema(end) / distanceCentroidToExtrema(end-1);
+    
+    
     
     
     %%
@@ -41,12 +55,12 @@ function [ featureVector ] = featureExtractor( Image, segmentationInformation )
     
     %% RGB and gray analysis hsv
     % Levels of each color
-    featureVector(5) = redstats.MeanIntensity;
-    featureVector(6) = greenstats.MeanIntensity;
-    featureVector(7) = bluestats.MeanIntensity;
-    featureVector(8) = graystats.MeanIntensity;
-    featureVector(8) = hstats.MeanIntensity;
-    featureVector(8) = vstats.MeanIntensity;
+    featureVector(5) = redstats(indexOfRegion).MeanIntensity;
+    featureVector(6) = greenstats(indexOfRegion).MeanIntensity;
+    featureVector(7) = bluestats(indexOfRegion).MeanIntensity;
+    featureVector(8) = graystats(indexOfRegion).MeanIntensity;
+    featureVector(8) = hstats(indexOfRegion).MeanIntensity;
+    featureVector(8) = vstats(indexOfRegion).MeanIntensity;
     
     % Distances between weighted centroids
     redCentroid = (redstats(indexOfRegion).WeightedCentroid);

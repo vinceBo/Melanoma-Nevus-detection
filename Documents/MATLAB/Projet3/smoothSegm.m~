@@ -1,0 +1,9 @@
+function [ smoothedBound ] = smoothSegm( Image, Boundary )
+%UNTITLED Summary of this function goes here
+%   Detailed explanation goes here
+    nbOfPixels = size(Boundary(2));
+    for k = 1:nbOfPixels
+    
+
+end
+

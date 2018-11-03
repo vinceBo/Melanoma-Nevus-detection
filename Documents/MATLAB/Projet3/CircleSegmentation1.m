@@ -64,7 +64,8 @@ function [ outputImage, segmentationInformation ] = CircleSegmentation1( inputIm
 
         %%
         % Determining circularity index
-        stats = regionprops(L,'Area','Centroid','ConvexArea','Perimeter','Eccentricity');
+        stats = regionprops(L,'Area','Centroid','ConvexArea','Perimeter','Eccentricity','Solidity', 'BoundingBox', ...
+        'EquivDiameter', 'Extrema', 'MajorAxisLength', 'MinorAxisLength', 'Extent');
 
         threshold = 0.15;
 
@@ -138,8 +139,9 @@ function [ outputImage, segmentationInformation ] = CircleSegmentation1( inputIm
     end
     
     if keptBoundary~=-1
-        
+        %segmentationSmoothed = smoothSegm(keptBoundary);
         plot(keptBoundary(:,2), keptBoundary(:,1), 'w', 'LineWidth', 2)
+        %plot(segmentationSmoothed(:,2), segmentationSmoothed(:,1), 'w', 'LineWidth', 2)
         centroid = keptStats.Centroid;
         plot(centroid(1),centroid(2),'ko');
         text(boundary(1,2)-35,boundary(1,1)+13,realMetricString,'Color','y',...

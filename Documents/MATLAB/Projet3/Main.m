@@ -46,7 +46,8 @@ for i=79:79
     [imageRetour, segmInfo ] = CircleSegmentation1(I1);
     segmInfo.Name = imName;
     %%
-    imshow(segmInfo.LabelMatrix)
+    holesFilled = imfill(segmInfo.LabelMatrix,'holes');
+    %imshow(holesFilled)
     segmentations.(strcat('mel',int2str(i))) = segmInfo; 
     %%
     features = featureExtractor(I1, segmInfo);
@@ -79,3 +80,9 @@ save('allSegmentations.mat','segmentations');
 %%
 clc, clear all
 load allSegmentations.mat;
+
+%% Testing LineCurvature2D
+SmoothedSegmentation = smoothSegm(segmInfo.BoundaryMatrix);
+figure,
+imshow(I1);
+plot(SmoothedSegmentation(:,2), SmoothedSegmentation(:,1), 'w', 'LineWidth', 2)
