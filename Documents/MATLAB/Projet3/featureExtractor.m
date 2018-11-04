@@ -1,11 +1,13 @@
 function [ featureVector ] = featureExtractor( Image, segmentationInformation )
 %UNTITLED3 Summary of this function goes here
 %   Detailed explanation goes here
+    numberOfCurvaturePoints = 200;
     imageF = Image;
     imageGray = rgb2gray(imageF);
     imageHsv = rgb2hsv(imageF);
     
     Boundary = segmentationInformation.BoundaryMatrix;
+    NumberOfBoundaryPoints = size(Boundary);
     stats = segmentationInformation.Stats;
     L = segmentationInformation.LabelMatrix;
     indexOfRegion = segmentationInformation.Index;
@@ -15,29 +17,52 @@ function [ featureVector ] = featureExtractor( Image, segmentationInformation )
     %%%%%%% Asymetry features %%%%%%%
    
     % Ratio convex hull area / total area
-    featureVector(1) = stats(indexOfRegion).ConvexArea/stats.Area;
+    featureVector(1) = stats.ConvexArea/stats.Area;
     
     % Circularity Index
-    featureVector(2) = 4*pi*stats(indexOfRegion).Area/(stats.Perimeter)^2;
+    featureVector(2) = 4*pi*stats.Area/(stats.Perimeter)^2;
     
     %%
     %%%%%%% Border features %%%%%%%
-    featureVector(3) = stats(indexOfRegion).Eccentricity;
-    featureVector(4) = stats(indexOfRegion).Perimeter/stats.Area;
-    featureVector(5) = stats(indexOfRegion).Solidity;
-    featureVector(6) = stats(indexOfRegion).Extent;
-    featureVector(7) = stats(indexOfRegion).Area / ((stats(indexOfRegion).EquivDiameter)/2)^2; 
-    featureVector(8) = stats(indexOfRegion).MinorAxisLength/stats(indexOfRegion).MajorAxisLength;
-    featureVector(9) = abs(stats(indexOfRegion.BoundingBox(2)) / stats(indexOfRegion.BoundingBox(3)))
+    featureVector(3) = stats.Eccentricity;
+    featureVector(4) = stats.Perimeter/stats.Area;
+    featureVector(5) = stats.Solidity;
+    featureVector(6) = stats.Extent;
+    featureVector(7) = stats.Area / ((stats.EquivDiameter)/2)^2; 
+    featureVector(8) = stats.MinorAxisLength/stats.MajorAxisLength;
+    featureVector(9) = abs(stats.BoundingBox(2) / stats.BoundingBox(3))
     % Distance from centroid
     for i = 1:8
-        distanceCentroidToExtrema(i) = norm(stats(indexOfRegion).Extrema(i) - stats(indexOfRegion).Centroid);
+        distanceCentroidToExtrema(i) = norm(stats.Extrema(i) - stats.Centroid);
     end
-    sortedDistances = Sort(distanceCentroidToExtrema);
+    sortedDistances = sort(distanceCentroidToExtrema);
     featureVector(8) = std(distanceCentroidToExtrema);
     featureVector(9) = distanceCentroidToExtrema(end) / distanceCentroidToExtrema(end-1);
     
+    % Curvature Analysis
     
+    inc = floor(NumberOfBoundaryPoints(1) / numberOfCurvaturePoints);
+    incrementer = 1;
+    for i = 1:inc:NumberOfBoundaryPoints(1)
+        matrixForCurvature(incrementer,:) = Boundary(i,:); 
+        incrementer = incrementer + 1;
+    end
+    kurvs=LineCurvature2D(matrixForCurvature);
+    
+    featureVector(10) = mean(kurvs);
+    featureVector(11) = std(kurvs);
+    featureVector(12) = max(kurvs);
+    featureVector(13) = min(kurvs);
+    featureVector(14) = mean(abs(kurvs));
+    featureVector(15) = std(abs(kurvs));
+    featureVector(16) = max(abs(kurvs));
+    featureVector(17) = min(abs(kurvs));
+    
+    % Bending Energy
+    featureVector(18) = sum(kurvs.^2);
+    
+    %Absolute Curvature
+    featureVector(19) = sum(kurvs);
     
     
     %%

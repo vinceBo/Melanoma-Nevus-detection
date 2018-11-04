@@ -10,7 +10,7 @@ function [ outputImage, segmentationInformation ] = CircleSegmentation1( inputIm
     
     nevus01GRAY = rgb2gray(nevus01RGB);
     nevus01GRAY = preprocessing(nevus01GRAY);
-    %nevus01GRAY = Gillette(nevus01GRAY);
+    nevus01GRAY = Gillette(nevus01GRAY);
     
     
     nevusGrayDouble = im2double(nevus01GRAY);
@@ -38,6 +38,7 @@ function [ outputImage, segmentationInformation ] = CircleSegmentation1( inputIm
         lastMetric = 0.15;
         disp('we in')
         nevus01BW = im2bw(inverseGray,sensitivity);
+        %nevus01BW = im2bw(inverseGray,0.88);
         %nevus01BW = imbinarize(nevus01GRAY);
 
         % remove all object containing fewer than 30 pixels
@@ -65,7 +66,8 @@ function [ outputImage, segmentationInformation ] = CircleSegmentation1( inputIm
         %%
         % Determining circularity index
         stats = regionprops(L,'Area','Centroid','ConvexArea','Perimeter','Eccentricity','Solidity', 'BoundingBox', ...
-        'EquivDiameter', 'Extrema', 'MajorAxisLength', 'MinorAxisLength', 'Extent');
+        'EquivDiameter', 'Extrema', 'MajorAxisLength', 'MinorAxisLength', 'Extent','FilledImage','FilledArea',...
+        'EulerNumber','Orientation','PixelIdxList','PixelList','SubarrayIdx','ConvexHull','ConvexImage');
 
         threshold = 0.15;
 
@@ -94,9 +96,10 @@ function [ outputImage, segmentationInformation ] = CircleSegmentation1( inputIm
           
           %check if border is part of this boundary
           isBorderDetected = ImBorderDetection(boundary,inverseGray);
+          %isBorderDetected = false;
 
           % mark objects above the threshold with a black circle
-          if (metric > threshold && areaFactor > 0.01 && areaFactor < 0.40 && isBorderDetected == false)
+          if (metric > threshold && areaFactor > 0.03 && areaFactor < 0.80 && isBorderDetected == false)
               disp('in threshold');
               if found==true
                   disp('in found == true');
@@ -130,7 +133,7 @@ function [ outputImage, segmentationInformation ] = CircleSegmentation1( inputIm
         end
         
         sensitivity = sensitivity + 0.02;
-        
+        %isNextBetter = false;
         isNextBetter = CheckNextSensitivity(lastMetric,inverseGray,sensitivity,AreaTot);
         if (isNextBetter == true)
             ended = false;

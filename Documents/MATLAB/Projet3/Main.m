@@ -4,7 +4,7 @@ clear all
 %%
 path = '/Users/vincentbonnardeaux/Documents/MATLAB/Projet3/Database/';
 %%
-for i=79:79
+for i=164:164
     imName = 'sm';
     if i<10
         imName = strcat(imName,'00',int2str(i),'.jpg');
@@ -17,7 +17,7 @@ for i=79:79
     I1 = fetchData(path,imName);
     iGray = rgb2gray(I1);
     
-    %I1 = newRazor(I1);
+    I1 = newRazor(I1);
     %figure, imshow(razoredddd);
     %imshow(I1);
     %%
@@ -26,11 +26,11 @@ for i=79:79
 
     %iGray = rgb2gray(I1);
    
-    homoFiltered = preprocessing(I1);
-    gilettedI = Gillette(homoFiltered);
+    %I1 = preprocessing(I1);
+    %gilettedI = Gillette(homoFiltered);
 
     % Canny edge detection
-    ICanny = edge(homoFiltered,'canny');
+    %ICanny = edge(homoFiltered,'canny');
 
     %imshowpair(iGray,im2uint8(homoFiltered),'montage');
     
@@ -44,13 +44,20 @@ for i=79:79
     %imageRetour = CircleSegmentation1(imageCropped);
 
     [imageRetour, segmInfo ] = CircleSegmentation1(I1);
-    segmInfo.Name = imName;
+    %segmInfo(i).Name = imName;
+    segmentations(i).Name = imName;
+    segmentations(i).BoundaryMatrix = segmInfo.BoundaryMatrix;
+    segmentations(i).LabelMatrix = segmInfo.LabelMatrix;
+    segmentations(i).Index = segmInfo.Index;
+    segmentations(i).Stats = segmInfo.Stats;
     %%
-    holesFilled = imfill(segmInfo.LabelMatrix,'holes');
+    %holesFilled = imfill(segmInfo.LabelMatrix,'holes');
     %imshow(holesFilled)
-    segmentations.(strcat('mel',int2str(i))) = segmInfo; 
+    %segmentations.(strcat('mel',int2str(i))) = segmInfo; 
+     
+ 
     %%
-    features = featureExtractor(I1, segmInfo);
+    %features = featureExtractor(I1, segmInfo);
 end
 
 %% testing SVM
@@ -81,8 +88,26 @@ save('allSegmentations.mat','segmentations');
 clc, clear all
 load allSegmentations.mat;
 
+%% Testing smoothSegm
+%SmoothedSegmentation = smoothSegm(segmInfo.BoundaryMatrix);
+%figure,
+%imshow(I1);
+%plot(SmoothedSegmentation(:,2), SmoothedSegmentation(:,1), 'w', 'LineWidth', 2)
+
+
 %% Testing LineCurvature2D
-SmoothedSegmentation = smoothSegm(segmInfo.BoundaryMatrix);
-figure,
-imshow(I1);
-plot(SmoothedSegmentation(:,2), SmoothedSegmentation(:,1), 'w', 'LineWidth', 2)
+
+% Example, Circle
+NbEl = size (segmInfo.BoundaryMatrix);
+incrementer = 1;
+for i = 1:5:NbEl(1)
+    matrixForCurvature(incrementer,:) = segmInfo.BoundaryMatrix(i,:); 
+    incrementer = incrementer + 1;
+end
+k=LineCurvature2D(matrixForCurvature);
+%%
+figure, 
+k=k*100;
+x = linspace(1,222,222);
+plot(x,k,'o');
+axis equal;

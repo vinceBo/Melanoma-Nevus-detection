@@ -41,7 +41,8 @@ function [ imageOut ] = newRazor( imageIn )
             end    
         end
     end
-    %figure;
+
+    
     new_image=imsharpen(new_image);
     imshow(new_image)
 
